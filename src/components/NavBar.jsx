@@ -43,7 +43,9 @@ const NavBar = (props) => {
           <SearchBox value={searchValue} setSearchValue={setSearchValue} />
         ) : null}
       </div>
-      <FilterMovies genres={genres} setGenres={setGenres} />
+      {isMoviesSelected ? (
+        <FilterMovies genres={genres} setGenres={setGenres} />
+      ) : null}
     </div>
   );
 };

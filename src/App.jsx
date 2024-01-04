@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/App.css';
 import MovieList from './components/MovieList';
 import Footer from './components/Footer';
-
+import ScrollToTopButton from './components/FabButton';
 import NavBar from './components/NavBar';
 import { FallingLines } from 'react-loader-spinner';
 import * as JsSearch from 'js-search';
@@ -14,11 +14,10 @@ const App = () => {
   const [allData, setAll] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [loading, setLoading] = useState(false);
-  const [search] = useState(new JsSearch.Search(['title', 'genres']));
+  const [search] = useState(new JsSearch.Search(['title']));
   const [isMoviesSelected, setIsMoviesSelected] = useState(true);
   const [selectedGenres, setGenres] = useState([]);
   search.addIndex('title');
-  search.addIndex('genres');
 
   const BASE_URL = 'https://api.ahmetaydin.dev/api/v1';
   const getMovieRequest = async () => {
@@ -29,7 +28,7 @@ const App = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        limit: 12,
+        limit: 1200,
       }),
     });
     const responseJson = await response.json();
@@ -54,13 +53,13 @@ const App = () => {
       setLoading(true);
 
       try {
-        Promise.resolve(search.search(searchValue)).then((result) => {
-          if (result.length === 0) {
-            setMovies([]);
-          } else {
-            setMovies(result);
-          }
-        });
+        const result = search.search(searchValue);
+        console.log(result);
+        if (result.length === 0) {
+          setMovies([]);
+        } else {
+          setMovies(result);
+        }
       } catch (error) {
         console.error('Error:', error);
       } finally {
@@ -123,7 +122,9 @@ const App = () => {
             <About></About>
           )}
         </div>
+        <ScrollToTopButton />
       </div>
+
       <Footer />
     </>
   );
